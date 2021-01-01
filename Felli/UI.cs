@@ -33,5 +33,10 @@ namespace Felli
             Console.ReadKey();
             Console.Clear();
         }
+
+        public void ChooseMenu()
+        {
+            Console.WriteLine("First Player is White (W) or Black (B)?");
+        }
     }
 }

@@ -11,3 +11,16 @@ C:\Users\andre\Desktop\2ProjectoLP2\Felli\obj\Debug\netcoreapp3.1\Felli.csproj.C
 C:\Users\andre\Desktop\2ProjectoLP2\Felli\obj\Debug\netcoreapp3.1\Felli.dll
 C:\Users\andre\Desktop\2ProjectoLP2\Felli\obj\Debug\netcoreapp3.1\Felli.pdb
 C:\Users\andre\Desktop\2ProjectoLP2\Felli\obj\Debug\netcoreapp3.1\Felli.genruntimeconfig.cache
+C:\Users\Diogo Maia\Desktop\2ProjectoLP2\Felli\bin\Debug\netcoreapp3.1\Felli.exe
+C:\Users\Diogo Maia\Desktop\2ProjectoLP2\Felli\bin\Debug\netcoreapp3.1\Felli.deps.json
+C:\Users\Diogo Maia\Desktop\2ProjectoLP2\Felli\bin\Debug\netcoreapp3.1\Felli.runtimeconfig.json
+C:\Users\Diogo Maia\Desktop\2ProjectoLP2\Felli\bin\Debug\netcoreapp3.1\Felli.runtimeconfig.dev.json
+C:\Users\Diogo Maia\Desktop\2ProjectoLP2\Felli\bin\Debug\netcoreapp3.1\Felli.dll
+C:\Users\Diogo Maia\Desktop\2ProjectoLP2\Felli\bin\Debug\netcoreapp3.1\Felli.pdb
+C:\Users\Diogo Maia\Desktop\2ProjectoLP2\Felli\obj\Debug\netcoreapp3.1\Felli.csprojAssemblyReference.cache
+C:\Users\Diogo Maia\Desktop\2ProjectoLP2\Felli\obj\Debug\netcoreapp3.1\Felli.AssemblyInfoInputs.cache
+C:\Users\Diogo Maia\Desktop\2ProjectoLP2\Felli\obj\Debug\netcoreapp3.1\Felli.AssemblyInfo.cs
+C:\Users\Diogo Maia\Desktop\2ProjectoLP2\Felli\obj\Debug\netcoreapp3.1\Felli.csproj.CoreCompileInputs.cache
+C:\Users\Diogo Maia\Desktop\2ProjectoLP2\Felli\obj\Debug\netcoreapp3.1\Felli.dll
+C:\Users\Diogo Maia\Desktop\2ProjectoLP2\Felli\obj\Debug\netcoreapp3.1\Felli.pdb
+C:\Users\Diogo Maia\Desktop\2ProjectoLP2\Felli\obj\Debug\netcoreapp3.1\Felli.genruntimeconfig.cache
