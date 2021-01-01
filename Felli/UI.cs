@@ -34,9 +34,66 @@ namespace Felli
             Console.Clear();
         }
 
-        public void ChooseMenu()
-        {
+        public void ChooseMenu() => 
             Console.WriteLine("First Player is White (W) or Black (B)?");
+
+        public void Render(Square[,] gameGrid)
+        {
+            for (int x = 0; x < gameGrid.GetLength(0); x++)
+            {
+                //Iterate through the grid  
+                for (int y = 0; y < gameGrid.GetLength(1); y++)
+                {
+                    Console.Write(GetChar(gameGrid[x, y]) + "\t");
+                }
+
+                Console.WriteLine("\n\n");
+            }
+        }
+
+        private char GetChar(Square square)
+        {
+            char c = ' ';
+            if(square.Piece is null)
+            {
+                c = square.Type == Playable.playable ? '\u00B7' : ' ';
+            }
+            else
+            {
+                Piece piece = square.Piece;
+
+                //c = (char)piece.Id; //I dont know why it doesnt work had to
+                //put it it a switch
+                switch (piece.Id)
+                {
+                    case 1:
+                        c = '1';
+                        break;
+
+                    case 2:
+                        c = '2';
+                        break;
+
+                    case 3:
+                        c = '3';
+                        break;
+
+                    case 4:
+                        c = '4';
+                        break;
+
+                    case 5:
+                        c = '5';
+                        break;
+
+                    case 6:
+                        c = '6';
+                        break;
+                }
+            }
+
+
+            return c;
         }
     }
 }

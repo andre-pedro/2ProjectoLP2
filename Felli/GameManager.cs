@@ -12,6 +12,8 @@ namespace Felli
         private Player p2;
         private Player turn;
 
+        private Piece cPiece;
+
         private Square[,] gameGrid;
 
         public GameManager(UI ui)
@@ -26,13 +28,54 @@ namespace Felli
         {
             GetPlayers();
 
+            string c = "";
+
             turn = p1;
 
-            /*while (true)
+            while (true)
             {
+                while(cPiece is null)
+                {
+                    while(c != "1" && c != "2" && c != "3" && c != "4" &&
+                        c != "5" && c != "6")
+                    {
+                        Console.Clear();
+                        ui.Render(gameGrid);
+                        c = Console.ReadLine();
+                    }
 
-            }*/
+                    cPiece = ChoosenPiece(c);
+
+                    if(cPiece is null)
+                    {
+                        Console.WriteLine("Unavailable Piece to choose");
+                        Console.ReadKey();
+                    }
+                }
+                ChangeTurn();
+            }
         }
+
+        private Piece ChoosenPiece(string x)
+        {
+            Piece piece = null;
+
+            foreach(Square square in gameGrid)
+            {
+                if (square.HasPiece())
+                {
+                    if (square.Piece.Id == Convert.ToInt32(x)
+                    && square.Piece.Color == turn.Color
+                    && square.Piece.IsBlocked == false)
+                    {
+                        piece = square.Piece;
+                    }
+                }
+            }
+
+            return piece;
+        }
+        private void ChangeTurn() => turn = turn == p1 ? p2 : p1;
 
         private void SpawnPieces()
         {

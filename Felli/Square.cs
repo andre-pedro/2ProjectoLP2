@@ -14,5 +14,10 @@ namespace Felli
 
         public Square(Playable type) => Type = type;
 
+        public bool HasPiece()
+        {
+            return (Piece is null) ? false : true;
+        }
+
     }
 }
