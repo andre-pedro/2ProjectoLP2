@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Felli
 {
@@ -49,6 +47,60 @@ namespace Felli
 
                 Console.WriteLine("\n\n");
             }
+
+            DrawBoard();
+            DrawMov();
+        }
+
+        private void DrawMov()
+        {
+
+            WriteIn("Select the desired direction with your numpad!", 2, 50);
+            WriteIn(@"  7(NW)   8(N)   9(NE)", 4, 60);
+            WriteIn(@"    \      |      /", 5, 60);
+            WriteIn(@"     \     |     /", 6, 60);
+            WriteIn(@"      \    |    /", 7, 60);
+            WriteIn(@"4(W)-------------- 6(E)", 8, 60);
+            WriteIn(@"      /    |    \", 9, 60);
+            WriteIn(@"     /     |     \", 10, 60);
+            WriteIn(@"    /      |      \", 11, 60);
+            WriteIn(@"  1(SW)   2(S)   3(SE)", 12, 60);
+
+
+        }
+
+        private void DrawBoard()
+        {
+            WriteIn(" ------------- ", 0, 1);
+            WriteIn(" ------------- ", 0, 17);
+
+            //Second Line
+            WriteIn(@"-            |             -", 1, 3);
+            WriteIn(@"-         |          -", 2, 6);
+
+            //Third Line
+            WriteIn(@"-----", 3, 10);
+            WriteIn(@"-----", 3, 18);
+
+            //Fourth Line
+            WriteIn(@"-     |     -", 4, 10);
+            WriteIn(@"-   |   -", 5, 12);
+
+            //Fifth Line
+            WriteIn(@"-   |   -", 7, 12);
+            WriteIn(@"-     |     -", 8, 10);
+
+            //Sixth Line
+            WriteIn(@"-----", 9, 18);
+            WriteIn(@"-----", 9, 10);
+
+            //Seventh Line
+            WriteIn(@"-         |          -", 10, 6);
+            WriteIn(@"-            |             -", 11, 3);
+
+            //Eigth Line
+            WriteIn(" ------------- ", 12, 17);
+            WriteIn(" ------------- ", 12, 1);
         }
 
         private char GetChar(Square square)
@@ -108,6 +160,17 @@ namespace Felli
             Console.WriteLine($"Selected Piece: {p.Id}");
             Console.WriteLine();
             Console.Write("Choose one of the options -> ");
+        }
+
+        public void WriteIn(string s, int x, int y)
+        {
+            int oRow = Console.CursorTop;
+            int oCol = Console.CursorLeft;
+
+            Console.SetCursorPosition(y, x);
+            Console.Write(s);
+            Console.SetCursorPosition(oCol, oRow);
+
         }
     }
 }

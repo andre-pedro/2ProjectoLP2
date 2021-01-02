@@ -89,7 +89,7 @@ namespace Felli
             int nRow = 0;
             int nColumn = 0;
             int pRow;
-            int pColumn;            
+            int pColumn;
 
             if (!(c <= 1 && c >= 6))
             {
@@ -263,44 +263,44 @@ namespace Felli
         private void PossibleMoves()
         {
             gameGrid[0, 0].PossibleMovements
-                    = new Directions[] { 
+                    = new Directions[] {
                         Directions.E, Directions.SE };
             gameGrid[0, 2].PossibleMovements
-                = new Directions[] { 
+                = new Directions[] {
                     Directions.S, Directions.E, Directions.O};
             gameGrid[0, 4].PossibleMovements
-                = new Directions[] { 
+                = new Directions[] {
                     Directions.O, Directions.SO };
             gameGrid[1, 1].PossibleMovements
-                = new Directions[] { 
+                = new Directions[] {
                     Directions.NO, Directions.E, Directions.SE};
             gameGrid[1, 2].PossibleMovements
-                = new Directions[] { 
+                = new Directions[] {
                     Directions.N, Directions.S, Directions.E, Directions.O };
             gameGrid[1, 3].PossibleMovements
-                = new Directions[] { 
+                = new Directions[] {
                     Directions.NE, Directions.O, Directions.SO };
             gameGrid[2, 2].PossibleMovements
-                = new Directions[] { 
+                = new Directions[] {
                     Directions.NE, Directions.N, Directions.NO,
                     Directions.SO, Directions.S, Directions.SE };
             gameGrid[3, 1].PossibleMovements
-                = new Directions[] { 
+                = new Directions[] {
                     Directions.NE, Directions.E, Directions.SO };
             gameGrid[3, 2].PossibleMovements
-                = new Directions[] { 
+                = new Directions[] {
                     Directions.N, Directions.S, Directions.E, Directions.O };
             gameGrid[3, 3].PossibleMovements
-                = new Directions[] { 
+                = new Directions[] {
                     Directions.NO, Directions.O, Directions.SE };
             gameGrid[4, 0].PossibleMovements
-                = new Directions[] { 
+                = new Directions[] {
                     Directions.NE, Directions.E };
             gameGrid[4, 2].PossibleMovements
-                = new Directions[] { 
+                = new Directions[] {
                     Directions.O, Directions.E, Directions.N };
             gameGrid[4, 4].PossibleMovements
-                = new Directions[] { 
+                = new Directions[] {
                     Directions.O, Directions.NO };
         }
     }
