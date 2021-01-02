@@ -25,6 +25,53 @@
 
         }
 
+        public void MoveTo(Directions dir)
+        {
+            PreviousCol = Col;
+            PreviousRow = Row;
+
+            switch (dir)
+            {
+                case Directions.NE:
+                    Col++;
+                    Row--;
+                    break;
+
+                case Directions.N:
+                    Row--;
+                    break;
+
+                case Directions.NO:
+                    Col--;
+                    Row--;
+                    break;
+
+                case Directions.E:
+                    if (Row == 0 || Row == 4) Col += 2;
+                    else Col++;
+                    break;
+
+                case Directions.O:
+                    if (Row == 0 || Row == 4) Col -= 2;
+                    else Col--;
+                    break;
+
+                case Directions.SE:
+                    Col++;
+                    Row++;
+                    break;
+
+                case Directions.S:
+                    Row++;
+                    break;
+
+                case Directions.SO:
+                    Col--;
+                    Row++;
+                    break;
+            }
+        }
+
         public void ResetMovement()
         {
             Row = PreviousRow;

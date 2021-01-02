@@ -42,13 +42,12 @@ namespace Felli
 
         private void ChooseDirection((bool, int, int, bool) mov)
         {
-            string c = "";
+            int c = 0;
 
             while (mov.Item1 == false)
             {
 
-                while (c != "1" && c != "2" && c != "3" && c != "4" &&
-                    c != "5" && c != "6")
+                while (c <= 1 && c >= 6)
                 {
                     Console.Clear();
 
@@ -56,7 +55,18 @@ namespace Felli
                     ui.ShowPossibleDirections(gameGrid[cPiece.Row,
                     cPiece.Col].PossibleMovements, cPiece);
 
-                    c = Console.ReadLine();
+                    bool number = false;
+                    while (!number)
+                    {
+                        try
+                        {
+                            c = Convert.ToInt32(Console.ReadLine());
+                        }
+                        catch
+                        {
+                            Console.WriteLine("Insert a number");
+                        }
+                    }
 
                     mov = CheckMovement(c);
 
@@ -65,24 +75,20 @@ namespace Felli
                         Console.WriteLine("Unavailable movment to choose");
                         Console.ReadKey();
                     }
-
                 }
-
             }
-
         }
 
-        private (bool, int, int, bool) CheckMovement(string c)
+        private (bool, int, int, bool) CheckMovement(int c)
         {
             bool value = false;
             bool eraseEnemy = false;
-            int previousRow;
-            int previousColumn;
-            int newRow;
-            int newColumn;
+            int nRow = 0;
+            int nColumn = 0;
+            int pRow;
+            int pColumn;            
 
-            if (c != "1" && c != "2" && c != "3" && c != "4" && c != "5" &&
-                c != "6")
+            if (!(c <= 1 && c >= 6))
             {
                 return (false, 0, 0, false);
             }
@@ -92,8 +98,48 @@ namespace Felli
 
                 if (gameGrid[cPiece.Row, cPiece.Col].HasDirection(dir))
                 {
+                    cPiece.MoveTo(dir);
+
+                    Square targetSq = gameGrid[cPiece.Row, cPiece.Col];
+                    pRow = cPiece.PreviousRow;
+                    pColumn = cPiece.PreviousCol;
+                    nRow = cPiece.Row;
+                    nColumn = cPiece.Col;
+
+                    if (!targetSq.HasPiece())
+                    {
+                        value = true;
+                    }
+                    else
+                    {
+                        if (cPiece.Color != targetSq.Piece.Color)
+                        {
+
+                            if (targetSq.HasDirection(dir))
+                            {
+                                cPiece.MoveTo(dir);
+                                nRow = cPiece.Row;
+                                nColumn = cPiece.Col;
+                                eraseEnemy = true;
+
+                                if (gameGrid[cPiece.Row, cPiece.Col].HasPiece())
+                                {
+                                    value = false;
+                                }
+                                else
+                                {
+                                    value = true;
+                                }
+                            }
+                        }
+                    }
+                    cPiece.Row = pRow;
+                    cPiece.Col = pColumn;
+                    cPiece.PreviousRow = pRow;
+                    cPiece.PreviousCol = pColumn;
 
                 }
+                return (value, nRow, nColumn, eraseEnemy);
             }
 
         }
