@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Felli
 {
     class GameManager
     {
-        private UI ui;
+        private readonly UI ui;
 
         private Player p1;
         private Player p2;
@@ -28,31 +26,99 @@ namespace Felli
         {
             GetPlayers();
 
-            string c = "";
-
             turn = p1;
 
             while (true)
             {
-                while(cPiece is null)
+                (bool, int, int, bool) mov = (false, 0, 0, false);
+
+                ChoosePiece();
+
+                ChooseDirection(mov);
+
+                ChangeTurn();
+            }
+        }
+
+        private void ChooseDirection((bool, int, int, bool) mov)
+        {
+            string c = "";
+
+            while (mov.Item1 == false)
+            {
+
+                while (c != "1" && c != "2" && c != "3" && c != "4" &&
+                    c != "5" && c != "6")
                 {
-                    while(c != "1" && c != "2" && c != "3" && c != "4" &&
-                        c != "5" && c != "6")
-                    {
-                        Console.Clear();
-                        ui.Render(gameGrid);
-                        c = Console.ReadLine();
-                    }
+                    Console.Clear();
 
-                    cPiece = ChoosenPiece(c);
+                    ui.Render(gameGrid);
+                    ui.ShowPossibleDirections(gameGrid[cPiece.Row,
+                    cPiece.Col].PossibleMovements, cPiece);
 
-                    if(cPiece is null)
+                    c = Console.ReadLine();
+
+                    mov = CheckMovement(c);
+
+                    if (!mov.Item1)
                     {
-                        Console.WriteLine("Unavailable Piece to choose");
+                        Console.WriteLine("Unavailable movment to choose");
                         Console.ReadKey();
                     }
+
                 }
-                ChangeTurn();
+
+            }
+
+        }
+
+        private (bool, int, int, bool) CheckMovement(string c)
+        {
+            bool value = false;
+            bool eraseEnemy = false;
+            int previousRow;
+            int previousColumn;
+            int newRow;
+            int newColumn;
+
+            if (c != "1" && c != "2" && c != "3" && c != "4" && c != "5" &&
+                c != "6")
+            {
+                return (false, 0, 0, false);
+            }
+            else
+            {
+                Directions dir = (Directions)Convert.ToInt32(c);
+
+                if (gameGrid[cPiece.Row, cPiece.Col].HasDirection(dir))
+                {
+
+                }
+            }
+
+        }
+
+        private void ChoosePiece()
+        {
+            string c = "";
+
+            while (cPiece is null)
+            {
+                while (c != "1" && c != "2" && c != "3" && c != "4" &&
+                    c != "5" && c != "6")
+                {
+                    Console.Clear();
+                    ui.Render(gameGrid);
+                    c = Console.ReadLine();
+                }
+
+                cPiece = ChoosenPiece(c);
+
+                if (cPiece is null)
+                {
+                    Console.WriteLine("Unavailable Piece to choose");
+                    Console.ReadKey();
+                }
             }
         }
 
@@ -60,7 +126,7 @@ namespace Felli
         {
             Piece piece = null;
 
-            foreach(Square square in gameGrid)
+            foreach (Square square in gameGrid)
             {
                 if (square.HasPiece())
                 {

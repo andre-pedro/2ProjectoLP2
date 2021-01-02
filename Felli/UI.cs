@@ -34,7 +34,7 @@ namespace Felli
             Console.Clear();
         }
 
-        public void ChooseMenu() => 
+        public void ChooseMenu() =>
             Console.WriteLine("First Player is White (W) or Black (B)?");
 
         public void Render(Square[,] gameGrid)
@@ -54,7 +54,7 @@ namespace Felli
         private char GetChar(Square square)
         {
             char c = ' ';
-            if(square.Piece is null)
+            if (square.Piece is null)
             {
                 c = square.Type == Playable.playable ? '\u00B7' : ' ';
             }
@@ -94,6 +94,20 @@ namespace Felli
 
 
             return c;
+        }
+
+        public void ShowPossibleDirections(Directions[] possibleMoves, Piece p)
+        {
+            Console.WriteLine();
+            Console.WriteLine("Possible movements:");
+            foreach (Directions direction in possibleMoves)
+            {
+                Console.Write(direction + ", ");
+            }
+            Console.WriteLine();
+            Console.WriteLine($"Selected Piece: {p.Id}");
+            Console.WriteLine();
+            Console.Write("Choose one of the options -> ");
         }
     }
 }

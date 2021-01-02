@@ -19,5 +19,18 @@ namespace Felli
             return (Piece is null) ? false : true;
         }
 
+        public bool HasDirection(Directions dir)
+        {
+            foreach (Directions direction in PossibleMovements)
+            {
+                if (direction == dir)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
     }
 }
