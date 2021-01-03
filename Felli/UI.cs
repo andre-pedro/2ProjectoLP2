@@ -14,12 +14,12 @@ namespace Felli
             Console.WriteLine("     The players decide which colors to play with and who " +
                               "plays first.");
             Console.WriteLine("     Then the first player chooses which piece he wants to play first. " +
-                "\n   The pieces can be moved in the following ways: " +
+                "\n     The pieces can be moved in the following ways: " +
                 "\n          The player can move in all possible directions and then " +
                              "choose the direction on the numpad." +
-                "\n          *The can jump over an adjacent opponent's piece, eliminating " +
+                "\n          The can jump over an adjacent opponent's piece, eliminating " +
                              "that piece and landing at a free spot on the board." +
-                "\n          *Only one piece can move per turn.");
+                "\n          Only one piece can move per turn.");
             Console.WriteLine("   Afterwards, it's the second player's turn, following the same rules.");
             Console.WriteLine();
             Console.WriteLine("Objectives:");
@@ -146,6 +146,13 @@ namespace Felli
 
 
             return c;
+        }
+
+        public void Win(Player winner)
+        {
+            Console.Clear();
+            Console.Write($"Player {winner.Id} wins!!!!");
+
         }
 
         public void ShowPossibleDirections(Directions[] possibleMoves, Piece p)

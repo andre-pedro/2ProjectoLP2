@@ -32,10 +32,18 @@ namespace Felli
             UpdateBlockedPieces();
 
             while (true)
-            {      
+            {
                 ChoosePiece();
 
-                ChooseDirection();                
+                ChooseDirection();
+
+                if (Win())
+                {
+                    Console.Clear();
+                    ui.Render(gameGrid);
+                    ui.Win(turn);
+                    break;
+                }
 
                 ChangeTurn();
             }
@@ -52,7 +60,7 @@ namespace Felli
 
                 while (c != "0" && c != "1" && c != "2" && c != "3" && c != "4"
                     && c != "5" && c != "6" && c != "7")
-                    {
+                {
                     Console.Clear();
 
                     ui.Render(gameGrid);
@@ -69,9 +77,9 @@ namespace Felli
                         Console.WriteLine("Unavailable movment to choose");
                         Console.ReadKey();
                     }
-                    
+
                 }
-                
+
             }
 
             if (mov.Item4)
@@ -233,14 +241,14 @@ namespace Felli
                     {
                         bool value = false;
 
-                        foreach (Directions d in 
+                        foreach (Directions d in
                             gameGrid[x, y].PossibleMovements)
                         {
                             value = CheckPos(gameGrid[x, y].Piece, d);
 
                             if (!value) break;
                         }
-                        gameGrid[x, y].Piece.IsBlocked =  value;
+                        gameGrid[x, y].Piece.IsBlocked = value;
                     }
                 }
             }
@@ -259,7 +267,7 @@ namespace Felli
             if (gameGrid[piece.Row, piece.Col].HasPiece())
             {
                 if (gameGrid[piece.Row, piece.Col].Piece.Color != piece.Color)
-                { 
+                {
                     if (gameGrid[piece.Row, piece.Col].HasDirection(dir))
                     {
                         piece.MoveTo(dir);
@@ -390,6 +398,51 @@ namespace Felli
             gameGrid[4, 4].PossibleMovements
                 = new Directions[] {
                     Directions.O, Directions.NO };
+        }
+
+        private bool Win()
+        {
+            if (p1.Color == turn.Color)
+            {
+                if (p2.PieceCount == 0 || HasAllPiecesBlocked(p2.Color))
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                if (p1.PieceCount == 0 || HasAllPiecesBlocked(p1.Color))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private bool HasAllPiecesBlocked(PieceColor color)
+        {
+            bool value = false;
+
+            foreach (Square square in gameGrid)
+            {
+                if (square.HasPiece())
+                {
+                    if (square.Piece.Color == color)
+                    {
+                        //value = sq.Piece.IsBlocked ? true : false;
+                        if (square.Piece.IsBlocked)
+                        {
+                            value = true;
+                        }
+                        else
+                        {
+                            value = false;
+                            break;
+                        }
+                    }
+                }
+            }
+            return value;
         }
     }
 }
