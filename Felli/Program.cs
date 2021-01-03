@@ -1,17 +1,22 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 
 namespace Felli
 {
-    class Program
+    /// <summary>
+    /// Class program.
+    /// </summary>
+    internal static class Program
     {
-        static void Main(string[] args)
-        {            
-            UI ui = new UI();
-            GameManager gm = new GameManager(ui);
+        /// <summary>
+        /// Main method of the program.
+        /// </summary>
+        private static void Main()
+        {
+            GameManager gm = new GameManager();
+            Thread game = new Thread(new ThreadStart(gm.GameLoop));
 
-            ui.MainMenu();
-            gm.GameLoop();
+            UI.MainMenu();
+            game.Start();
         }
     }
 }

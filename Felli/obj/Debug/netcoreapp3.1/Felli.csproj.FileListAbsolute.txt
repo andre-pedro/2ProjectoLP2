@@ -17,7 +17,9 @@ C:\Users\Diogo Maia\Desktop\2ProjectoLP2\Felli\bin\Debug\netcoreapp3.1\Felli.run
 C:\Users\Diogo Maia\Desktop\2ProjectoLP2\Felli\bin\Debug\netcoreapp3.1\Felli.runtimeconfig.dev.json
 C:\Users\Diogo Maia\Desktop\2ProjectoLP2\Felli\bin\Debug\netcoreapp3.1\Felli.dll
 C:\Users\Diogo Maia\Desktop\2ProjectoLP2\Felli\bin\Debug\netcoreapp3.1\Felli.pdb
+C:\Users\Diogo Maia\Desktop\2ProjectoLP2\Felli\bin\Debug\netcoreapp3.1\Felli.xml
 C:\Users\Diogo Maia\Desktop\2ProjectoLP2\Felli\obj\Debug\netcoreapp3.1\Felli.csprojAssemblyReference.cache
+C:\Users\Diogo Maia\Desktop\2ProjectoLP2\Felli\obj\Debug\netcoreapp3.1\Felli.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\Diogo Maia\Desktop\2ProjectoLP2\Felli\obj\Debug\netcoreapp3.1\Felli.AssemblyInfoInputs.cache
 C:\Users\Diogo Maia\Desktop\2ProjectoLP2\Felli\obj\Debug\netcoreapp3.1\Felli.AssemblyInfo.cs
 C:\Users\Diogo Maia\Desktop\2ProjectoLP2\Felli\obj\Debug\netcoreapp3.1\Felli.csproj.CoreCompileInputs.cache

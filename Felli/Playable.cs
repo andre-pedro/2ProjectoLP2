@@ -1,12 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Felli
+﻿namespace Felli
 {
-    enum Playable
+    /// <summary>
+    /// Enum to see if the piece is playable or not.
+    /// </summary>
+    internal enum Playable
     {
-        playable,
-        nonPlayable
+        /// <summary>
+        /// Piece is playable.
+        /// </summary>
+        Playable = 0,
+
+        /// <summary>
+        /// Piece is non playable.
+        /// </summary>
+        NonPlayable = 1,
     }
 }

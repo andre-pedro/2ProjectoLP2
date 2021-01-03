@@ -1,28 +1,52 @@
 ﻿using System;
+using System.Threading;
 
 namespace Felli
 {
-    class GameManager
+    /// <summary>
+    /// Class Gamanager.
+    /// </summary>
+    internal class GameManager
     {
-        private readonly UI ui;
+        /// <summary>
+        /// Represents the game board.
+        /// </summary>
+        private readonly Square[,] gameGrid;
 
+        /// <summary>
+        /// Represents player 1.
+        /// </summary>
         private Player p1;
+
+        /// <summary>
+        /// Represents player 2.
+        /// </summary>
         private Player p2;
+
+        /// <summary>
+        /// Representes current player playing.
+        /// </summary>
         private Player turn;
 
+        /// <summary>
+        /// Represents current Piece.
+        /// </summary>
         private Piece cPiece;
 
-        private Square[,] gameGrid;
-
-        public GameManager(UI ui)
+        /// <summary>
+        /// Constructor of the class.
+        /// </summary>
+        public GameManager()
         {
-            this.ui = ui;
             gameGrid = new Square[5, 5];
 
             SpawnPieces();
             PossibleMoves();
         }
 
+        /// <summary>
+        /// Game loop method.
+        /// </summary>
         public void GameLoop()
         {
             GetPlayers();
@@ -35,37 +59,42 @@ namespace Felli
             {
                 ChoosePiece();
 
-                ChooseDirection();
+                MoveDirection();
 
                 if (Win())
                 {
                     Console.Clear();
-                    ui.Render(gameGrid);
-                    ui.Win(turn);
+                    UI.Render(gameGrid);
+                    UI.Win(turn);
                     break;
                 }
 
                 ChangeTurn();
+
+                Thread.Sleep(200);
             }
         }
 
-        private void ChooseDirection()
+        /// <summary>
+        /// Chooses the direction to where the piece should go and move.
+        /// </summary>
+        private void MoveDirection()
         {
-            string c = "";
+            string c = string.Empty;
 
             (bool, int, int, bool) mov = (false, 0, 0, false);
 
-            while (mov.Item1 == false)
+            while (!mov.Item1)
             {
-
                 while (c != "0" && c != "1" && c != "2" && c != "3" && c != "4"
                     && c != "5" && c != "6" && c != "7")
                 {
                     Console.Clear();
 
-                    ui.Render(gameGrid);
-                    ui.ShowPossibleDirections(gameGrid[cPiece.Row,
-                    cPiece.Col].PossibleMovements, cPiece);
+                    UI.Render(gameGrid);
+                    UI.ShowPossibleDirections(
+                        gameGrid[cPiece.Row, cPiece.Col].PossibleMovements,
+                        cPiece);
 
                     c = Console.ReadLine();
 
@@ -73,13 +102,11 @@ namespace Felli
 
                     if (!mov.Item1)
                     {
-                        c = "";
+                        c = string.Empty;
                         Console.WriteLine("Unavailable movment to choose");
                         Console.ReadKey();
                     }
-
                 }
-
             }
 
             if (mov.Item4)
@@ -101,6 +128,11 @@ namespace Felli
             UpdateBlockedPieces();
         }
 
+        /// <summary>
+        /// Method used to see if the piece can move in x direction.
+        /// </summary>
+        /// <param name="c">Choice of the player.</param>
+        /// <returns>Values used to move the piece.</returns>
         private (bool, int, int, bool) CheckMovement(string c)
         {
             bool value = false;
@@ -135,40 +167,35 @@ namespace Felli
                     }
                     else
                     {
-                        if (cPiece.Color != targetSq.Piece.Color)
+                        if (cPiece.Color != targetSq.Piece.Color &&
+                            targetSq.HasDirection(dir))
                         {
-                            if (targetSq.HasDirection(dir))
-                            {
-                                cPiece.MoveTo(dir);
-                                nRow = cPiece.Row;
-                                nColumn = cPiece.Col;
-                                eraseEnemy = true;
+                            cPiece.MoveTo(dir);
+                            nRow = cPiece.Row;
+                            nColumn = cPiece.Col;
+                            eraseEnemy = true;
 
-                                if (gameGrid[cPiece.Row, cPiece.Col].HasPiece())
-                                {
-                                    value = false;
-                                }
-                                else
-                                {
-                                    value = true;
-                                }
-                            }
+                            value =
+                                !gameGrid[cPiece.Row, cPiece.Col].HasPiece();
                         }
                     }
+
                     cPiece.Row = pRow;
                     cPiece.Col = pColumn;
                     cPiece.PreviousRow = pRow;
                     cPiece.PreviousCol = pColumn;
-
                 }
+
                 return (value, nRow, nColumn, eraseEnemy);
             }
-
         }
 
+        /// <summary>
+        /// Method used for the player to choose a piece.
+        /// </summary>
         private void ChoosePiece()
         {
-            string c = "";
+            string c = string.Empty;
 
             cPiece = null;
 
@@ -178,7 +205,7 @@ namespace Felli
                     c != "4" && c != "5" && c != "6")
                 {
                     Console.Clear();
-                    ui.Render(gameGrid);
+                    UI.Render(gameGrid);
                     Console.WriteLine($"{turn.Id} - {turn.Color} is playing.");
                     Console.WriteLine("Choose the piece you want" +
                         " to play from 1-6.");
@@ -196,28 +223,36 @@ namespace Felli
             }
         }
 
+        /// <summary>
+        /// Gets the piece.
+        /// </summary>
+        /// <param name="x">choice of the player.</param>
+        /// <returns>Piece the player choose.</returns>
         private Piece ChoosenPiece(string x)
         {
             Piece piece = null;
 
             foreach (Square square in gameGrid)
             {
-                if (square.HasPiece())
-                {
-                    if (square.Piece.Id == Convert.ToInt32(x)
+                if (square.HasPiece() && square.Piece.Id == Convert.ToInt32(x)
                     && square.Piece.Color == turn.Color
-                    && square.Piece.IsBlocked == false)
-                    {
-                        piece = square.Piece;
-                    }
+                    && !square.Piece.IsBlocked)
+                {
+                    piece = square.Piece;
                 }
             }
 
             return piece;
         }
 
+        /// <summary>
+        /// Changes the current player playing.
+        /// </summary>
         private void ChangeTurn() => turn = turn == p1 ? p2 : p1;
 
+        /// <summary>
+        /// Updates the number of pices each player has.
+        /// </summary>
         private void UpdatePieces()
         {
             if (turn == p1)
@@ -230,13 +265,15 @@ namespace Felli
             }
         }
 
+        /// <summary>
+        /// Updates the blocked pieces of the game.
+        /// </summary>
         private void UpdateBlockedPieces()
         {
             for (int x = 0; x < gameGrid.GetLength(0); x++)
             {
                 for (int y = 0; y < gameGrid.GetLength(1); y++)
                 {
-
                     if (gameGrid[x, y].HasPiece())
                     {
                         bool value = false;
@@ -246,14 +283,22 @@ namespace Felli
                         {
                             value = CheckPos(gameGrid[x, y].Piece, d);
 
-                            if (!value) break;
+                            if (!value)
+                                break;
                         }
+
                         gameGrid[x, y].Piece.IsBlocked = value;
                     }
                 }
             }
         }
 
+        /// <summary>
+        /// Checks if a piece can move in a direction.
+        /// </summary>
+        /// <param name="piece">Piece to move.</param>
+        /// <param name="dir">Direction to move.</param>
+        /// <returns>True if piece can be moved in that direction.</returns>
         private bool CheckPos(Piece piece, Directions dir)
         {
             int row = piece.Row;
@@ -271,7 +316,8 @@ namespace Felli
                     if (gameGrid[piece.Row, piece.Col].HasDirection(dir))
                     {
                         piece.MoveTo(dir);
-                        if (gameGrid[piece.Row, piece.Col].HasPiece()) value = true;
+                        if (gameGrid[piece.Row, piece.Col].HasPiece())
+                            value = true;
                     }
                 }
                 else
@@ -288,13 +334,16 @@ namespace Felli
             return value;
         }
 
+        /// <summary>
+        /// Populates the board with pieces.
+        /// </summary>
         private void SpawnPieces()
         {
             for (int i = 0; i < gameGrid.GetLength(0); ++i)
             {
                 for (int j = 0; j < gameGrid.GetLength(1); j++)
                 {
-                    gameGrid[i, j] = new Square(Playable.playable);
+                    gameGrid[i, j] = new Square(Playable.Playable);
                 }
             }
 
@@ -311,39 +360,47 @@ namespace Felli
             gameGrid[4, 2].Piece = new Piece(4, 2, 2, PieceColor.W);
             gameGrid[4, 4].Piece = new Piece(4, 4, 3, PieceColor.W);
 
-            gameGrid[0, 1] = new Square(Playable.nonPlayable);
-            gameGrid[0, 3] = new Square(Playable.nonPlayable);
-            gameGrid[1, 0] = new Square(Playable.nonPlayable);
-            gameGrid[1, 4] = new Square(Playable.nonPlayable);
-            gameGrid[2, 0] = new Square(Playable.nonPlayable);
-            gameGrid[2, 1] = new Square(Playable.nonPlayable);
-            gameGrid[2, 3] = new Square(Playable.nonPlayable);
-            gameGrid[2, 4] = new Square(Playable.nonPlayable);
-            gameGrid[3, 0] = new Square(Playable.nonPlayable);
-            gameGrid[3, 4] = new Square(Playable.nonPlayable);
-            gameGrid[4, 1] = new Square(Playable.nonPlayable);
-            gameGrid[4, 3] = new Square(Playable.nonPlayable);
-
+            gameGrid[0, 1] = new Square(Playable.NonPlayable);
+            gameGrid[0, 3] = new Square(Playable.NonPlayable);
+            gameGrid[1, 0] = new Square(Playable.NonPlayable);
+            gameGrid[1, 4] = new Square(Playable.NonPlayable);
+            gameGrid[2, 0] = new Square(Playable.NonPlayable);
+            gameGrid[2, 1] = new Square(Playable.NonPlayable);
+            gameGrid[2, 3] = new Square(Playable.NonPlayable);
+            gameGrid[2, 4] = new Square(Playable.NonPlayable);
+            gameGrid[3, 0] = new Square(Playable.NonPlayable);
+            gameGrid[3, 4] = new Square(Playable.NonPlayable);
+            gameGrid[4, 1] = new Square(Playable.NonPlayable);
+            gameGrid[4, 3] = new Square(Playable.NonPlayable);
         }
 
-
+        /// <summary>
+        /// Gets the menu to let the players pick the color.
+        /// </summary>
         private void GetPlayers()
         {
-            string choice = "";
+            string choice = string.Empty;
 
-            while (choice.ToUpper() != "W" && choice.ToUpper() != "B")
+            while (!string.Equals(
+                choice, "W", StringComparison.OrdinalIgnoreCase)
+                && !string.Equals(
+                    choice, "B", StringComparison.OrdinalIgnoreCase))
             {
                 Console.Clear();
-                ui.ChooseMenu();
+                UI.ChooseMenu();
                 choice = Console.ReadLine().ToUpper();
             }
 
             SetPlayers(choice);
         }
 
+        /// <summary>
+        /// Sets the players with the respective colors.
+        /// </summary>
+        /// <param name="choice">Color of the player.</param>
         private void SetPlayers(string choice)
         {
-            if (choice.ToUpper() == "W")
+            if (string.Equals(choice, "W", StringComparison.OrdinalIgnoreCase))
             {
                 p1 = new Player(PieceColor.W, 1);
                 p2 = new Player(PieceColor.B, 2);
@@ -353,53 +410,59 @@ namespace Felli
                 p1 = new Player(PieceColor.B, 1);
                 p2 = new Player(PieceColor.W, 2);
             }
-
         }
 
+        /// <summary>
+        /// Makes the possible moves from each board position.
+        /// </summary>
         private void PossibleMoves()
         {
             gameGrid[0, 0].PossibleMovements
                     = new Directions[] {
-                        Directions.E, Directions.SE };
+                        Directions.E, Directions.SE, };
             gameGrid[0, 2].PossibleMovements
                 = new Directions[] {
-                    Directions.S, Directions.E, Directions.O};
+                    Directions.S, Directions.E, Directions.O, };
             gameGrid[0, 4].PossibleMovements
                 = new Directions[] {
-                    Directions.O, Directions.SO };
+                    Directions.O, Directions.SO, };
             gameGrid[1, 1].PossibleMovements
                 = new Directions[] {
-                    Directions.NO, Directions.E, Directions.SE};
+                    Directions.NO, Directions.E, Directions.SE, };
             gameGrid[1, 2].PossibleMovements
                 = new Directions[] {
-                    Directions.N, Directions.S, Directions.E, Directions.O };
+                    Directions.N, Directions.S, Directions.E, Directions.O, };
             gameGrid[1, 3].PossibleMovements
                 = new Directions[] {
-                    Directions.NE, Directions.O, Directions.SO };
+                    Directions.NE, Directions.O, Directions.SO, };
             gameGrid[2, 2].PossibleMovements
                 = new Directions[] {
                     Directions.NE, Directions.N, Directions.NO,
-                    Directions.SO, Directions.S, Directions.SE };
+                    Directions.SO, Directions.S, Directions.SE, };
             gameGrid[3, 1].PossibleMovements
                 = new Directions[] {
-                    Directions.NE, Directions.E, Directions.SO };
+                    Directions.NE, Directions.E, Directions.SO, };
             gameGrid[3, 2].PossibleMovements
                 = new Directions[] {
-                    Directions.N, Directions.S, Directions.E, Directions.O };
+                    Directions.N, Directions.S, Directions.E, Directions.O, };
             gameGrid[3, 3].PossibleMovements
                 = new Directions[] {
-                    Directions.NO, Directions.O, Directions.SE };
+                    Directions.NO, Directions.O, Directions.SE, };
             gameGrid[4, 0].PossibleMovements
                 = new Directions[] {
-                    Directions.NE, Directions.E };
+                    Directions.NE, Directions.E, };
             gameGrid[4, 2].PossibleMovements
                 = new Directions[] {
-                    Directions.O, Directions.E, Directions.N };
+                    Directions.O, Directions.E, Directions.N, };
             gameGrid[4, 4].PossibleMovements
                 = new Directions[] {
-                    Directions.O, Directions.NO };
+                    Directions.O, Directions.NO, };
         }
 
+        /// <summary>
+        /// Sees if a player has win.
+        /// </summary>
+        /// <returns>True if a player won.</returns>
         private bool Win()
         {
             if (p1.Color == turn.Color)
@@ -416,32 +479,35 @@ namespace Felli
                     return true;
                 }
             }
+
             return false;
         }
 
+        /// <summary>
+        /// Checks if a player has all his pieces blocked.
+        /// </summary>
+        /// <param name="color">Color of the player.</param>
+        /// <returns>True if all pieces blocked.</returns>
         private bool HasAllPiecesBlocked(PieceColor color)
         {
             bool value = false;
 
             foreach (Square square in gameGrid)
             {
-                if (square.HasPiece())
+                if (square.HasPiece() && square.Piece.Color == color)
                 {
-                    if (square.Piece.Color == color)
+                    if (square.Piece.IsBlocked)
                     {
-                        //value = sq.Piece.IsBlocked ? true : false;
-                        if (square.Piece.IsBlocked)
-                        {
-                            value = true;
-                        }
-                        else
-                        {
-                            value = false;
-                            break;
-                        }
+                        value = true;
+                    }
+                    else
+                    {
+                        value = false;
+                        break;
                     }
                 }
             }
+
             return value;
         }
     }
