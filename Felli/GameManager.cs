@@ -14,8 +14,6 @@ namespace Felli
 
         private Square[,] gameGrid;
 
-        private (bool, int, int, bool) mov;
-
         public GameManager(UI ui)
         {
             this.ui = ui;
@@ -31,58 +29,71 @@ namespace Felli
 
             turn = p1;
 
-            while (true)
-            {
-                mov = (false, 0, 0, false);
+            UpdateBlockedPieces();
 
+            while (true)
+            {      
                 ChoosePiece();
 
-                ChooseDirection(mov);
+                ChooseDirection();                
 
                 ChangeTurn();
             }
         }
 
-        private void ChooseDirection((bool, int, int, bool) mov)
+        private void ChooseDirection()
         {
-            int c = 0;
+            string c = "";
+
+            (bool, int, int, bool) mov = (false, 0, 0, false);
 
             while (mov.Item1 == false)
             {
 
-                while (c <= 1 && c >= 6)
-                {
+                while (c != "0" && c != "1" && c != "2" && c != "3" && c != "4"
+                    && c != "5" && c != "6" && c != "7")
+                    {
                     Console.Clear();
 
                     ui.Render(gameGrid);
                     ui.ShowPossibleDirections(gameGrid[cPiece.Row,
                     cPiece.Col].PossibleMovements, cPiece);
 
-                    bool number = false;
-                    while (!number)
-                    {
-                        try
-                        {
-                            c = Convert.ToInt32(Console.ReadLine());
-                        }
-                        catch
-                        {
-                            Console.WriteLine("Insert a number");
-                        }
-                    }
+                    c = Console.ReadLine();
 
-                    CheckMovement(c);
+                    mov = CheckMovement(c);
 
                     if (!mov.Item1)
                     {
+                        c = "";
                         Console.WriteLine("Unavailable movment to choose");
                         Console.ReadKey();
                     }
+                    
                 }
+                
             }
+
+            if (mov.Item4)
+            {
+                cPiece.MoveTo((Directions)Convert.ToInt32(c));
+
+                gameGrid[cPiece.Row, cPiece.Col].Piece = null;
+
+                cPiece.ResetMovement();
+                UpdatePieces();
+            }
+
+            cPiece.Row = mov.Item2;
+            cPiece.Col = mov.Item3;
+
+            gameGrid[cPiece.Row, cPiece.Col].Piece = cPiece;
+            gameGrid[cPiece.PreviousRow, cPiece.PreviousCol].Piece = null;
+
+            UpdateBlockedPieces();
         }
 
-        private void CheckMovement(int c)
+        private (bool, int, int, bool) CheckMovement(string c)
         {
             bool value = false;
             bool eraseEnemy = false;
@@ -91,9 +102,10 @@ namespace Felli
             int pRow;
             int pColumn;
 
-            if (!(c <= 1 && c >= 6))
+            if (c != "0" && c != "1" && c != "2" && c != "3"
+            && c != "4" && c != "5" && c != "6" && c != "7")
             {
-                mov = (false, 0, 0, false);
+                return (false, 0, 0, false);
             }
             else
             {
@@ -117,7 +129,6 @@ namespace Felli
                     {
                         if (cPiece.Color != targetSq.Piece.Color)
                         {
-
                             if (targetSq.HasDirection(dir))
                             {
                                 cPiece.MoveTo(dir);
@@ -142,7 +153,7 @@ namespace Felli
                     cPiece.PreviousCol = pColumn;
 
                 }
-                mov = (value, nRow, nColumn, eraseEnemy);
+                return (value, nRow, nColumn, eraseEnemy);
             }
 
         }
@@ -151,13 +162,19 @@ namespace Felli
         {
             string c = "";
 
+            cPiece = null;
+
             while (cPiece is null)
             {
-                while (c != "1" && c != "2" && c != "3" && c != "4" &&
-                    c != "5" && c != "6")
+                while (c != "1" && c != "2" && c != "3" &&
+                    c != "4" && c != "5" && c != "6")
                 {
                     Console.Clear();
                     ui.Render(gameGrid);
+                    Console.WriteLine($"{turn.Id} - {turn.Color} is playing.");
+                    Console.WriteLine("Choose the piece you want" +
+                        " to play from 1-6.");
+                    Console.WriteLine();
                     c = Console.ReadLine();
                 }
 
@@ -190,7 +207,78 @@ namespace Felli
 
             return piece;
         }
+
         private void ChangeTurn() => turn = turn == p1 ? p2 : p1;
+
+        private void UpdatePieces()
+        {
+            if (turn == p1)
+            {
+                p2.PieceCount--;
+            }
+            else
+            {
+                p1.PieceCount--;
+            }
+        }
+
+        private void UpdateBlockedPieces()
+        {
+            for (int x = 0; x < gameGrid.GetLength(0); x++)
+            {
+                for (int y = 0; y < gameGrid.GetLength(1); y++)
+                {
+
+                    if (gameGrid[x, y].HasPiece())
+                    {
+                        bool value = false;
+
+                        foreach (Directions d in 
+                            gameGrid[x, y].PossibleMovements)
+                        {
+                            value = CheckPos(gameGrid[x, y].Piece, d);
+
+                            if (!value) break;
+                        }
+                        gameGrid[x, y].Piece.IsBlocked =  value;
+                    }
+                }
+            }
+        }
+
+        private bool CheckPos(Piece piece, Directions dir)
+        {
+            int row = piece.Row;
+            int column = piece.Col;
+            int previousRow = piece.PreviousRow;
+            int previousColumn = piece.PreviousCol;
+            bool value = false;
+
+            piece.MoveTo(dir);
+
+            if (gameGrid[piece.Row, piece.Col].HasPiece())
+            {
+                if (gameGrid[piece.Row, piece.Col].Piece.Color != piece.Color)
+                { 
+                    if (gameGrid[piece.Row, piece.Col].HasDirection(dir))
+                    {
+                        piece.MoveTo(dir);
+                        if (gameGrid[piece.Row, piece.Col].HasPiece()) value = true;
+                    }
+                }
+                else
+                {
+                    value = true;
+                }
+            }
+
+            piece.Row = row;
+            piece.Col = column;
+            piece.PreviousRow = previousRow;
+            piece.PreviousCol = previousColumn;
+
+            return value;
+        }
 
         private void SpawnPieces()
         {
