@@ -118,23 +118,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Diogo Maia\\.nuget\\packages\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\andre\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Diogo Maia\\Desktop\\2ProjectoLP2\\Felli\\Felli.csproj",
+      "projectUniqueName": "C:\\Users\\andre\\Desktop\\2ProjectoLP2\\Felli\\Felli.csproj",
       "projectName": "Felli",
-      "projectPath": "C:\\Users\\Diogo Maia\\Desktop\\2ProjectoLP2\\Felli\\Felli.csproj",
-      "packagesPath": "C:\\Users\\Diogo Maia\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Diogo Maia\\Desktop\\2ProjectoLP2\\Felli\\obj\\",
+      "projectPath": "C:\\Users\\andre\\Desktop\\2ProjectoLP2\\Felli\\Felli.csproj",
+      "packagesPath": "C:\\Users\\andre\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\andre\\Desktop\\2ProjectoLP2\\Felli\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-      ],
       "configFilePaths": [
-        "C:\\Users\\Diogo Maia\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\andre\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -146,7 +142,6 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
-          "targetAlias": "netcoreapp3.1",
           "projectReferences": {}
         }
       },
@@ -158,7 +153,6 @@
     },
     "frameworks": {
       "netcoreapp3.1": {
-        "targetAlias": "netcoreapp3.1",
         "dependencies": {
           "Roslynator.Analyzers": {
             "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
@@ -200,7 +194,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.100\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.302\\RuntimeIdentifierGraph.json"
       }
     }
   }

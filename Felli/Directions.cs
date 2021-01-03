@@ -36,7 +36,7 @@
         NO = 5,
 
         /// <summary>
-        /// SothEast.
+        /// SouthEast.
         /// </summary>
         SE = 6,
 

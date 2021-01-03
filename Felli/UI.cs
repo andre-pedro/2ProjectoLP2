@@ -8,7 +8,7 @@ namespace Felli
     internal static class UI
     {
         /// <summary>
-        /// Shoes the main menu of the game.
+        /// Shows the main menu of the game.
         /// </summary>
         public static void MainMenu()
         {
@@ -46,13 +46,13 @@ namespace Felli
         }
 
         /// <summary>
-        /// Menu for the player to choose the color.
+        /// Menu where the player chooses their color.
         /// </summary>
         public static void ChooseMenu() =>
             Console.WriteLine("First Player is White (W) or Black (B)?");
 
         /// <summary>
-        /// Draws th eplayable pieces.
+        /// Draws the playable pieces.
         /// </summary>
         /// <param name="square">A position on the board.</param>
         /// <returns>Char to write.</returns>

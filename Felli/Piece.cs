@@ -42,7 +42,7 @@
         public bool IsBlocked { get; set; }
 
         /// <summary>
-        /// Construcotr of the class.
+        /// Constructor of the class.
         /// </summary>
         /// <param name="row">Row of the Piece.</param>
         /// <param name="col">Collumn of the piece.</param>

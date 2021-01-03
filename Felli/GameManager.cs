@@ -24,7 +24,7 @@ namespace Felli
         private Player p2;
 
         /// <summary>
-        /// Representes current player playing.
+        /// Represents the current player playing.
         /// </summary>
         private Player turn;
 
@@ -49,18 +49,24 @@ namespace Felli
         /// </summary>
         public void GameLoop()
         {
+            // Get the players and respective colors
             GetPlayers();
 
+            // Make player 1 play
             turn = p1;
 
+            // Update the Blocked Pieces
             UpdateBlockedPieces();
 
+            // Play a turn
             while (true)
             {
                 ChoosePiece();
 
                 MoveDirection();
 
+
+                // If a player wins, clear the board and show the winner.
                 if (Win())
                 {
                     Console.Clear();
@@ -82,6 +88,7 @@ namespace Felli
         {
             string c = string.Empty;
 
+            // Movement Tuple
             (bool, int, int, bool) mov = (false, 0, 0, false);
 
             while (!mov.Item1)
@@ -89,9 +96,13 @@ namespace Felli
                 while (c != "0" && c != "1" && c != "2" && c != "3" && c != "4"
                     && c != "5" && c != "6" && c != "7")
                 {
+                    // Clear the window
                     Console.Clear();
 
+                    // Render the grid
                     UI.Render(gameGrid);
+
+                    // Show the possible directions
                     UI.ShowPossibleDirections(
                         gameGrid[cPiece.Row, cPiece.Col].PossibleMovements,
                         cPiece);
@@ -100,10 +111,11 @@ namespace Felli
 
                     mov = CheckMovement(c);
 
+                    // If an unavaliable movement is chosen, display an appropriate message.
                     if (!mov.Item1)
                     {
                         c = string.Empty;
-                        Console.WriteLine("Unavailable movment to choose");
+                        Console.WriteLine("Unavailable movement to choose");
                         Console.ReadKey();
                     }
                 }
@@ -142,6 +154,7 @@ namespace Felli
             int pRow;
             int pColumn;
 
+            // Check if the player chooses an unavaliable direction
             if (c != "0" && c != "1" && c != "2" && c != "3"
             && c != "4" && c != "5" && c != "6" && c != "7")
             {
@@ -199,6 +212,7 @@ namespace Felli
 
             cPiece = null;
 
+            // Ask the player which piece they wish to choose.
             while (cPiece is null)
             {
                 while (c != "1" && c != "2" && c != "3" &&
@@ -215,6 +229,7 @@ namespace Felli
 
                 cPiece = ChoosenPiece(c);
 
+                // If the chosen piece isn't allowed to be chosen, display an appropriate message.
                 if (cPiece is null)
                 {
                     Console.WriteLine("Unavailable Piece to choose");
@@ -227,11 +242,12 @@ namespace Felli
         /// Gets the piece.
         /// </summary>
         /// <param name="x">choice of the player.</param>
-        /// <returns>Piece the player choose.</returns>
+        /// <returns>Piece the player chooses.</returns>
         private Piece ChoosenPiece(string x)
         {
             Piece piece = null;
 
+            // Gets the piece (with color and ID) the player chooses.
             foreach (Square square in gameGrid)
             {
                 if (square.HasPiece() && square.Piece.Id == Convert.ToInt32(x)
@@ -251,7 +267,7 @@ namespace Felli
         private void ChangeTurn() => turn = turn == p1 ? p2 : p1;
 
         /// <summary>
-        /// Updates the number of pices each player has.
+        /// Updates the number of pieces each player has.
         /// </summary>
         private void UpdatePieces()
         {
@@ -309,6 +325,7 @@ namespace Felli
 
             piece.MoveTo(dir);
 
+            // Check if a position on the grid doesn't have another piece and is able to be moved there.
             if (gameGrid[piece.Row, piece.Col].HasPiece())
             {
                 if (gameGrid[piece.Row, piece.Col].Piece.Color != piece.Color)
@@ -339,6 +356,7 @@ namespace Felli
         /// </summary>
         private void SpawnPieces()
         {
+            // Draw the grid
             for (int i = 0; i < gameGrid.GetLength(0); ++i)
             {
                 for (int j = 0; j < gameGrid.GetLength(1); j++)
@@ -347,6 +365,7 @@ namespace Felli
                 }
             }
 
+            // Spawn each piece with its specific color and position on the grid
             gameGrid[0, 0].Piece = new Piece(0, 0, 1, PieceColor.B);
             gameGrid[0, 2].Piece = new Piece(0, 2, 2, PieceColor.B);
             gameGrid[0, 4].Piece = new Piece(0, 4, 3, PieceColor.B);
@@ -360,6 +379,7 @@ namespace Felli
             gameGrid[4, 2].Piece = new Piece(4, 2, 2, PieceColor.W);
             gameGrid[4, 4].Piece = new Piece(4, 4, 3, PieceColor.W);
 
+            // Spawn each non-playable square on a specific position on the grid
             gameGrid[0, 1] = new Square(Playable.NonPlayable);
             gameGrid[0, 3] = new Square(Playable.NonPlayable);
             gameGrid[1, 0] = new Square(Playable.NonPlayable);
@@ -400,6 +420,7 @@ namespace Felli
         /// <param name="choice">Color of the player.</param>
         private void SetPlayers(string choice)
         {
+            // If the player chooses W, set its color to white and the opponent's color to black.
             if (string.Equals(choice, "W", StringComparison.OrdinalIgnoreCase))
             {
                 p1 = new Player(PieceColor.W, 1);
@@ -407,6 +428,7 @@ namespace Felli
             }
             else
             {
+                // If the player chooses B, set its color to black and the opponent's color to white.
                 p1 = new Player(PieceColor.B, 1);
                 p2 = new Player(PieceColor.W, 2);
             }
@@ -465,6 +487,7 @@ namespace Felli
         /// <returns>True if a player won.</returns>
         private bool Win()
         {
+            // If the other player has all their pieces blocked, they lose and the current player wins.
             if (p1.Color == turn.Color)
             {
                 if (p2.PieceCount == 0 || HasAllPiecesBlocked(p2.Color))
@@ -487,11 +510,12 @@ namespace Felli
         /// Checks if a player has all his pieces blocked.
         /// </summary>
         /// <param name="color">Color of the player.</param>
-        /// <returns>True if all pieces blocked.</returns>
+        /// <returns>True if all pieces are blocked.</returns>
         private bool HasAllPiecesBlocked(PieceColor color)
         {
             bool value = false;
 
+            // Check if the piece of the current player's color is blocked by all sides
             foreach (Square square in gameGrid)
             {
                 if (square.HasPiece() && square.Piece.Color == color)
