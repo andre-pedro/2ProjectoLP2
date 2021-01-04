@@ -1,7 +1,7 @@
 ﻿namespace Felli
 {
     /// <summary>
-    /// Enumeration conatining the directions the piece can moce.
+    /// Enumeration containing the directions a piece can move.
     /// </summary>
     internal enum Directions
     {

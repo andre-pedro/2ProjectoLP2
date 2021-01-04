@@ -201,7 +201,7 @@ namespace Felli
 
         /// <summary>
         /// Writes in a certain part of the console.
-        /// </summary>
+        /// </summary> 
         /// <param name="s">What to write.</param>
         /// <param name="x">X pos of the console.</param>
         /// <param name="y">Y pos of the console.</param>
